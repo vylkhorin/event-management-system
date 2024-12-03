@@ -2,43 +2,163 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Profile • EMS</title>
+  <title>My Profile • EventHub</title>
+  <meta name="description" content="Manage your EventHub profile and security settings"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/theme.css"/>
   <style>
-    body{margin:0;background:#0c1126;color:#e8ebff;font-family:Inter,system-ui,Segoe UI,Roboto}
-    header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:#0e1430;border-bottom:1px solid #1e2447}
-    .wrap{max-width:680px;margin:24px auto;padding:0 16px}
-    .card{background:#10173a;border:1px solid #1e2855;border-radius:14px;padding:16px}
-    label{display:block;margin-top:12px;font-size:.95rem}
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid #2a3976;background:#0c1436;color:#e8ebff;margin-top:6px}
-    button{margin-top:14px;appearance:none;border:none;border-radius:10px;padding:12px 16px;background:#6c63ff;color:#fff;font-weight:700;cursor:pointer}
-    button.secondary{background:#202a59;border:1px solid #2a3976}
-    .row{display:flex;gap:10px;align-items:center}
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .profile-sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-align: center;
+      position: sticky;
+      top: 88px;
+    }
+    .avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem; font-weight: 800; color: white;
+      box-shadow: 0 8px 24px rgba(108,99,255,0.3);
+    }
+    .profile-name { font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:4px; }
+    .profile-email { font-size:.85rem;color:var(--text-muted);margin-bottom:16px; }
+    .profile-role { display:inline-flex;align-items:center;gap:5px; }
+    .profile-main { display:flex;flex-direction:column;gap:22px; }
+    @media(max-width:768px) {
+      .profile-layout { grid-template-columns:1fr; }
+      .profile-sidebar { position:static; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div>Profile</div>
-    <div class="row">
-      <a href="user.html">Dashboard</a>
-      <button class="secondary" onclick="logout()">Logout</button>
+  <header class="ems-header">
+    <div class="ems-brand">
+      <div class="ems-brand-icon"><span class="material-icons">event</span></div>
+      EventHub
     </div>
+    <nav class="ems-nav">
+      <a href="user.html">
+        <span class="material-icons" style="font-size:18px;vertical-align:middle">arrow_back</span>
+        Dashboard
+      </a>
+      <button class="btn btn-secondary btn-sm" onclick="logout()" style="margin-left:8px">
+        <span class="material-icons">logout</span> Logout
+      </button>
+    </nav>
   </header>
 
   <div class="wrap">
-    <div class="card">
-      <h3>My Profile</h3>
-      <label>Full Name
-        <input id="profName" type="text" placeholder="Full name"/>
-      </label>
-      <label>Email
-        <input id="profEmail" type="email" placeholder="Email" disabled/>
-      </label>
-      <button onclick="updateProfile()">Save Changes</button>
+    <div class="section-header" style="margin-bottom:28px">
+      <h1 class="section-title">My Profile</h1>
+    </div>
+
+    <div class="profile-layout">
+      <!-- Sidebar -->
+      <div class="profile-sidebar">
+        <div class="avatar" id="avatarInitial">?</div>
+        <div class="profile-name" id="sidebarName">—</div>
+        <div class="profile-email" id="sidebarEmail">—</div>
+        <span class="badge badge-purple profile-role">
+          <span class="material-icons" style="font-size:13px">person</span>
+          Member
+        </span>
+      </div>
+
+      <!-- Main panels -->
+      <div class="profile-main">
+        <!-- Account Info -->
+        <div class="card card-accent-top">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px">
+            <span class="material-icons" style="color:var(--primary-light);font-size:20px">account_circle</span>
+            Account Information
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="profName" class="form-control" placeholder="Your full name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="profEmail" class="form-control" placeholder="your@email.com"/>
+          </div>
+          <button class="btn btn-primary" onclick="updateProfile()">
+            <span class="material-icons">save</span> Save Changes
+          </button>
+        </div>
+
+        <!-- Password Change -->
+        <div class="card card-accent-top">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px">
+            <span class="material-icons" style="color:var(--primary-light);font-size:20px">lock</span>
+            Change Password
+          </h3>
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <div class="input-with-icon">
+              <span class="material-icons">lock_outline</span>
+              <input type="password" id="oldPassword" class="form-control" placeholder="Current password"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <div class="input-with-icon">
+              <span class="material-icons">lock</span>
+              <input type="password" id="newPassword" class="form-control" placeholder="Min. 6 characters"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <div class="input-with-icon">
+              <span class="material-icons">lock</span>
+              <input type="password" id="cfmPassword" class="form-control" placeholder="Confirm new password"/>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="updatePassword()">
+            <span class="material-icons">key</span> Update Password
+          </button>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card" style="border-color:rgba(239,68,68,0.2)">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:8px;color:var(--danger);display:flex;align-items:center;gap:8px">
+            <span class="material-icons" style="font-size:20px">warning_amber</span>
+            Account Actions
+          </h3>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:16px">Sign out from all sessions.</p>
+          <button class="btn btn-danger" onclick="logout()">
+            <span class="material-icons">logout</span> Sign Out
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script src="js/main.js"></script>
   <script src="js/user.js"></script>
+  <script>
+    ensureLoggedIn();
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadProfileForm();
+      // Populate sidebar from loaded data
+      const name  = document.getElementById('profName').value;
+      const email = document.getElementById('profEmail').value;
+      if (name) {
+        document.getElementById('sidebarName').textContent = name;
+        document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+      }
+      if (email) document.getElementById('sidebarEmail').textContent = email;
+    });
+  </script>
 </body>
 </html>

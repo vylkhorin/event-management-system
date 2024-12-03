@@ -1,258 +1,88 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Login • EMS</title>
+  <title>Login • EventHub</title>
+  <meta name="description" content="Login to your EventHub account"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css"/>
   <style>
-    :root {
-      --primary: #185a9d;
-      --primary-light: #43cea2;
-      --primary-dark: #0f3b60;
-      --text-dark: #1f2a37;
-      --text-light: #5f6b7a;
-      --white: #ffffff;
-      --input-bg: rgba(255, 255, 255, 0.9);
-      --input-border: #e2e8f0;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Poppins', system-ui, sans-serif;
-      min-height: 100vh;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--primary-light), var(--primary));
-      color: var(--text-dark);
-      overflow: hidden;
-      position: relative;
+      min-height: 100vh;
+      padding: 24px;
     }
-
-    /* Animated background elements */
-    .bg-circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      animation: float 20s infinite ease-in-out;
-    }
-
-    .bg-circle-1 {
-      width: 300px;
-      height: 300px;
-      top: -150px;
-      right: -150px;
-      animation-delay: 0s;
-    }
-
-    .bg-circle-2 {
-      width: 200px;
-      height: 200px;
-      bottom: -100px;
-      left: -100px;
-      animation-delay: 2s;
-    }
-
-    .bg-circle-3 {
-      width: 150px;
-      height: 150px;
-      top: 50%;
-      left: 10%;
-      animation-delay: 4s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(10deg); }
-    }
-
-    /* Login container */
-    .box {
-      width: 420px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 40px 35px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      animation: rise 0.6s ease;
-      position: relative;
-      z-index: 10;
-      overflow: hidden;
-    }
-
-    .box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
+    .auth-box {
       width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      max-width: 440px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
+      animation: rise 0.5s ease;
     }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes rise { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .auth-logo {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px;
+      font-family: 'Sora',sans-serif; font-weight:700; font-size:1.2rem;
     }
-
-    /* Header */
-    h1 {
-      margin: 0 0 15px;
-      font-size: 2rem;
-      font-weight: 600;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-align: center;
+    .auth-logo-icon {
+      width:40px;height:40px;border-radius:var(--radius-sm);
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      display:flex;align-items:center;justify-content:center;
     }
-
-    .muted {
-      color: var(--text-light);
-      margin: 0 0 25px;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    /* Form elements */
-    label {
-      display: block;
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .input-group .material-icons {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-light);
-      font-size: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 15px 15px 15px 45px;
-      border-radius: 12px;
-      border: 1px solid var(--input-border);
-      margin-bottom: 5px;
-      font-size: 1rem;
-      background: var(--input-bg);
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(24, 90, 157, 0.15);
-    }
-
-    /* Button */
-    .btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: var(--white);
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn:hover {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(24, 90, 157, 0.2);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    /* Row with link */
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-
-    a:hover {
-      color: var(--primary-dark);
-      text-decoration: underline;
-    }
-
-    /* Decorative elements */
-    .decorative-dots {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-image: radial-gradient(var(--primary-light) 1px, transparent 1px);
-      background-size: 20px 20px;
-      opacity: 0.1;
-      pointer-events: none;
-    }
+    .auth-logo-icon .material-icons { color:white;font-size:22px; }
+    .auth-title { font-size:1.5rem;font-weight:800;margin-bottom:6px; }
+    .auth-sub { font-size:.9rem;color:var(--text-muted);margin-bottom:28px; }
+    .auth-footer { text-align:center;margin-top:22px;font-size:.88rem;color:var(--text-muted); }
+    .auth-footer a { color:var(--primary-light);font-weight:600; }
+    .auth-footer a:hover { color:var(--primary); }
+    /* Orbs */
+    .orb { position:fixed;border-radius:50%;filter:blur(80px);opacity:0.1;pointer-events:none;z-index:-1; }
+    .orb-1 { width:400px;height:400px;background:var(--primary);top:-150px;left:-150px; }
+    .orb-2 { width:400px;height:400px;background:var(--secondary);bottom:-150px;right:-150px; }
   </style>
 </head>
 <body>
-  <!-- Background elements -->
-  <div class="bg-circle bg-circle-1"></div>
-  <div class="bg-circle bg-circle-2"></div>
-  <div class="bg-circle bg-circle-3"></div>
-  <div class="decorative-dots"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 
-  <!-- Login form -->
-  <div class="box">
-    <h1>Welcome back</h1>
-    <p class="muted">Login to continue</p>
-    <form id="loginForm">
-      <div class="input-group">
-        <label>Email</label>
-        <i class="material-icons">email</i>
-        <input type="email" id="email" required/>
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><span class="material-icons">event</span></div>
+      EventHub
+    </div>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Sign in to your account</p>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="form-group">
+        <label class="form-label">Email or Name</label>
+        <div class="input-with-icon">
+          <span class="material-icons">person</span>
+          <input type="text" id="identifier" class="form-control" placeholder="you@example.com or John Doe" required autocomplete="username"/>
+        </div>
       </div>
-      <div class="input-group">
-        <label>Password</label>
-        <i class="material-icons">lock</i>
-        <input type="password" id="password" required/>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-with-icon">
+          <span class="material-icons">lock</span>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password"/>
+        </div>
       </div>
-      <button class="btn" type="submit">Login</button>
-      <div class="row">
-        <span></span>
-        <a href="register.html">Create account</a>
-      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-size:1rem;margin-top:8px">
+        <span class="material-icons">login</span> Login
+      </button>
     </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="register.html">Create one</a>
+    </div>
   </div>
-  
+
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
 </body>

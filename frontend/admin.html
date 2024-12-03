@@ -2,447 +2,241 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Admin Dashboard • EMS</title>
+  <title>Admin Dashboard • EventHub</title>
+  <meta name="description" content="Admin control panel for EventHub"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css"/>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --secondary-gradient: linear-gradient(135deg, #b486b9 0%, #bb9399 100%);
-      --success-gradient: linear-gradient(135deg, #4facfe 0%, #405a5c 100%);
-      --danger-gradient: linear-gradient(135deg, #93717c 0%, #42656d 100%);
-      --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
-      --card-bg: rgba(255, 255, 255, 0.1);
-      --text-primary: #ffffff;
-      --text-secondary: #e0e0e0;
-      --border-color: rgba(255, 255, 255, 0.18);
+    .admin-header-actions { display:flex;align-items:center;gap:10px; }
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
     }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    .chart-title {
+      font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;
+      color:var(--text-secondary);margin-bottom:16px;
     }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(120deg, #1a1a2e, #16213e, #0f3460);
-      color: var(--text-secondary);
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-      text-align: center;
-    }
-    
-    /* Animated background */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 20%),
-        radial-gradient(circle at 50% 50%, rgba(120, 219, 255, 0.2) 0%, transparent 30%);
-      z-index: -1;
-      animation: backgroundAnimation 20s ease infinite;
-    }
-    
-    @keyframes backgroundAnimation {
-      0%, 100% { opacity: 0.8; }
-      50% { opacity: 1; }
-    }
-    
-    /* Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 30px;
-      background: rgba(26, 26, 46, 0.7);
-      border-bottom: 1px solid var(--border-color);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .logo {
-      font-size: 1.6rem;
-      font-weight: 700;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .logo .material-icons {
-      font-size: 1.8rem;
-      -webkit-text-fill-color: #667eea;
-    }
-    
-    /* Header actions */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    #reportSummary {
-      padding: 8px 16px;
-      background: var(--card-bg);
-      border-radius: 30px;
-      border: 1px solid var(--border-color);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    /* Buttons */
-    button {
-      appearance: none;
-      border: none;
-      border-radius: 12px;
-      padding: 10px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      margin: 0 auto;
-    }
-    
-    button.primary {
-      background: var(--primary-gradient);
-      color: white;
-    }
-    
-    button.secondary {
-      background: var(--success-gradient);
-      color: white;
-    }
-    
-    button.danger {
-      background: var(--danger-gradient);
-      color: white;
-    }
-    
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    }
-    
-    button:active {
-      transform: translateY(1px);
-    }
-    
-    /* Main container */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 30px 20px;
-    }
-    
-    /* Section headings */
-    h2 {
-      text-align: center;
-      margin: 40px 0 30px;
-      font-size: 2.2rem;
-      color: var(--text-primary);
-      font-weight: 700;
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    
-    h2::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--primary-gradient);
-      border-radius: 2px;
-    }
-    
-    /* Form card */
-    .form-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 30px;
-      width: 100%;
-      max-width: 700px;
-      margin: 0 auto 50px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px) saturate(150%);
-      -webkit-backdrop-filter: blur(15px) saturate(150%);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    
-    .form-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-    
-    /* Form rows - now single column */
-    .form-field {
-      margin-bottom: 20px;
-      width: 100%;
-      text-align: center;
-    }
-    
-    /* Form inputs */
-    input, textarea {
-      padding: 14px 18px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-secondary);
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      width: 100%;
-      text-align: center;
-    }
-    
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: rgba(102, 126, 234, 0.5);
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-    }
-    
-    input::placeholder, textarea::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-      text-align: center;
-    }
-    
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-    
-    /* Form actions */
-    .form-actions {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 25px;
-      flex-wrap: wrap;
-    }
-    
-    /* Grid layout */
-    .grid {
+    .charts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
-      width: 100%;
-      margin-bottom: 60px;
-      justify-items: center;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
     }
-    
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px) saturate(150%);
-      -webkit-backdrop-filter: blur(15px) saturate(150%);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-      width: 100%;
+    @media(max-width:800px) { .charts-grid { grid-template-columns:1fr; } }
+    .form-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
-    
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: var(--primary-gradient);
+    @media(max-width:600px) { .form-two-col { grid-template-columns:1fr; } }
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 28px;
     }
-    
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    .form-card-title {
+      font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;
+      margin-bottom:22px;display:flex;align-items:center;gap:8px;
     }
-    
-    .card-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    .card-info {
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    
-    .card-info .material-icons {
-      font-size: 1.1rem;
-      color: #667eea;
-    }
-    
-    .card-description {
-      margin-top: 15px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-    
-    .card-actions {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    
-    .card-actions button {
-      padding: 8px 15px;
-      font-size: 0.85rem;
-    }
-    
-    /* Hint text */
-    .small {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-top: 15px;
-      text-align: center;
-      opacity: 0.8;
-    }
-    
-    /* Responsive design */
-    @media(max-width: 768px) {
-      .form-field {
-        margin-bottom: 15px;
-      }
-      
-      .form-card {
-        padding: 20px;
-      }
-      
-      h2 {
-        font-size: 1.8rem;
-      }
-      
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    /* Loading animation */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #667eea;
-      animation: spin 1s ease-in-out infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .form-card-title .material-icons { color:var(--primary-light);font-size:20px; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <i class="material-icons">dashboard</i>
+  <header class="ems-header">
+    <div class="ems-brand">
+      <div class="ems-brand-icon"><span class="material-icons">dashboard</span></div>
       Admin Dashboard
     </div>
-    <div class="header-actions">
-      <div id="reportSummary">
-        <i class="material-icons">assessment</i>
-        <span>Loading reports…</span>
-      </div>
-      <button class="danger" onclick="logout()">
-        <i class="material-icons">logout</i>
-        Logout
+    <div class="admin-header-actions">
+      <span id="adminName" style="font-size:.88rem;color:var(--text-muted)"></span>
+      <button class="btn btn-danger btn-sm" onclick="logout()">
+        <span class="material-icons">logout</span> Logout
       </button>
     </div>
   </header>
-  
-  <div class="container">
-    <!-- Form -->
-    <h2>Create / Edit Event</h2>
-    <div class="form-card">
-      <div class="form-field">
-        <input id="evTitle" placeholder="Event Title"/>
+
+  <div class="wrap">
+    <!-- Stat Cards -->
+    <div class="stats-grid" style="margin-bottom:28px">
+      <div class="stat-card">
+        <div class="stat-icon purple"><span class="material-icons">people</span></div>
+        <div><div class="stat-value" id="statUsers">—</div><div class="stat-label">Total Users</div></div>
       </div>
-      <div class="form-field">
-        <input id="evLocation" placeholder="Location"/>
+      <div class="stat-card">
+        <div class="stat-icon blue"><span class="material-icons">event</span></div>
+        <div><div class="stat-value" id="statEvents">—</div><div class="stat-label">Events</div></div>
       </div>
-      <div class="form-field">
-        <input id="evDate" type="datetime-local"/>
+      <div class="stat-card">
+        <div class="stat-icon green"><span class="material-icons">confirmation_number</span></div>
+        <div><div class="stat-value" id="statBookings">—</div><div class="stat-label">Bookings</div></div>
       </div>
-      <div class="form-field">
-        <input id="evTotal" type="number" placeholder="Total Seats"/>
+      <div class="stat-card">
+        <div class="stat-icon rose"><span class="material-icons">payments</span></div>
+        <div><div class="stat-value" id="statRevenue">—</div><div class="stat-label">Revenue</div></div>
       </div>
-      <div class="form-field">
-        <input id="evPrice" type="number" placeholder="Price"/>
-      </div>
-      <div class="form-field">
-        <textarea id="evDesc" placeholder="Event Description"></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="primary" onclick="createOrUpdateEvent()" id="eventSubmitBtn">
-          <i class="material-icons">save</i>
-          Create Event
-        </button>
-        <button class="secondary" onclick="resetEventForm()">
-          <i class="material-icons">clear</i>
-          Clear Form
-        </button>
-      </div>
-      <div class="small" id="editHint"></div>
     </div>
-    
-    <!-- Events & Bookings -->
-    <h2>Events</h2>
-    <div id="events" class="grid"></div>
-    
-    <h2>Bookings</h2>
-    <div id="bookings" class="grid"></div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">Revenue per Event</div>
+        <canvas id="revenueChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Booking Trend (Last 30 Days)</div>
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="events">
+        <span class="material-icons">event</span> Events
+      </button>
+      <button class="tab-btn" data-tab="bookings">
+        <span class="material-icons">confirmation_number</span> Bookings
+      </button>
+      <button class="tab-btn" data-tab="users">
+        <span class="material-icons">people</span> Users
+      </button>
+    </div>
+
+    <!-- Tab: Events -->
+    <div class="tab-panel active" id="tab-events">
+      <!-- Create/Edit Form -->
+      <div class="form-card" id="eventForm">
+        <div class="form-card-title">
+          <span class="material-icons">add_circle</span>
+          <span id="editHint">Create New Event</span>
+        </div>
+        <div class="form-two-col">
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input type="text" id="evTitle" class="form-control" placeholder="Event title"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location *</label>
+            <div class="input-with-icon">
+              <span class="material-icons">location_on</span>
+              <input type="text" id="evLocation" class="form-control" placeholder="City, Venue"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date & Time *</label>
+            <div class="input-with-icon">
+              <span class="material-icons">schedule</span>
+              <input type="datetime-local" id="evDate" class="form-control"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="evCategory" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Seats</label>
+            <input type="number" id="evTotal" class="form-control" placeholder="100" min="1"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price (₹)</label>
+            <div class="input-with-icon">
+              <span class="material-icons">currency_rupee</span>
+              <input type="number" id="evPrice" class="form-control" placeholder="0" min="0"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="evDesc" class="form-control" placeholder="Describe the event…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Event Image</label>
+          <input type="file" id="evImage" class="form-control" accept="image/*"/>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="eventSubmitBtn" onclick="createOrUpdateEvent()">
+            <span class="material-icons">add_circle</span> Create Event
+          </button>
+          <button class="btn btn-secondary" onclick="resetEventForm()">
+            <span class="material-icons">clear</span> Clear Form
+          </button>
+        </div>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="section-header">
+        <h2 class="section-title">All Events</h2>
+      </div>
+      <div class="grid-3" id="eventsGrid"></div>
+      <div class="pagination" id="eventsPagination"></div>
+    </div>
+
+    <!-- Tab: Bookings -->
+    <div class="tab-panel" id="tab-bookings">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;">
+        <h2 class="section-title" style="margin:0;">All Bookings</h2>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="input-with-icon" style="min-width:250px;">
+            <span class="material-icons">search</span>
+            <input type="text" id="adminBookingSearch" class="form-control" placeholder="Search user or email..." onkeyup="filterAdminBookings()" />
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+            <span class="material-icons">download</span> Export CSV
+          </button>
+        </div>
+      </div>
+      <div class="grid-3" id="bookingsGrid"></div>
+      <div class="pagination" id="bookingsPagination"></div>
+    </div>
+
+    <!-- Tab: Users -->
+    <div class="tab-panel" id="tab-users">
+      <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;">
+        <h2 class="section-title" style="margin:0;">Registered Users</h2>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="input-with-icon" style="min-width:250px;">
+            <span class="material-icons">search</span>
+            <input type="text" id="adminUserSearch" class="form-control" placeholder="Search user name or email..." onkeyup="filterAdminUsers()" />
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="exportUsersCSV()">
+            <span class="material-icons">download</span> Export CSV
+          </button>
+        </div>
+      </div>
+      <div class="grid-4" id="usersGrid"></div>
+    </div>
+    <!-- View Reviews Modal -->
+    <div id="viewReviewsModal" class="modal-overlay">
+      <div class="modal" style="max-width: 500px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:700;">Event Reviews</h3>
+          <button class="btn btn-secondary" style="padding:4px;border:none;background:transparent;" onclick="closeViewReviewsModal()">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+        <div id="reviewsList" style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+          <!-- Reviews will be injected here -->
+        </div>
+      </div>
+    </div>
+
   </div>
-  
+
+  <footer style="text-align:center;padding:24px;color:var(--text-muted);font-size:.82rem;border-top:1px solid var(--border);margin-top:40px">
+    © 2025 EventHub — Admin Panel
+  </footer>
+
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
+  <script>
+    // Show admin name in header
+    const n = getName();
+    if (n) document.getElementById('adminName').textContent = `👋 ${n}`;
+  </script>
 </body>
 </html>

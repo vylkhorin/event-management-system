@@ -2,400 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Register • EMS</title>
+  <title>Create Account • EventHub</title>
+  <meta name="description" content="Create your EventHub account to start booking events"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css"/>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    body { display:grid;place-items:center;min-height:100vh;padding:24px; }
+    .auth-box {
+      width:100%;max-width:460px;
+      background:var(--bg-surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      padding:40px;
+      box-shadow:var(--shadow-lg);
+      animation:rise .5s ease;
     }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      overflow: hidden;
-    }
-    
-    .container {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
-    
-    /* Left Visual Section */
-    .visual-section {
-      flex: 1;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      padding: 40px;
-    }
-    
-    .visual-content {
-      text-align: center;
-      z-index: 2;
-      max-width: 80%;
-    }
-    
-    .visual-content h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      letter-spacing: -1px;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .visual-content p {
-      font-size: 1.2rem;
-      font-weight: 300;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
-    
-    /* Floating Shapes Animation */
-    .floating-shapes {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      animation: float 15s infinite ease-in-out;
-    }
-    
-    .shape:nth-child(1) {
-      width: 200px;
-      height: 200px;
-      top: 10%;
-      left: 10%;
-      animation-delay: 0s;
-    }
-    
-    .shape:nth-child(2) {
-      width: 150px;
-      height: 150px;
-      top: 60%;
-      left: 70%;
-      animation-delay: 2s;
-    }
-    
-    .shape:nth-child(3) {
-      width: 100px;
-      height: 100px;
-      top: 30%;
-      left: 80%;
-      animation-delay: 4s;
-    }
-    
-    .shape:nth-child(4) {
-      width: 120px;
-      height: 120px;
-      top: 70%;
-      left: 20%;
-      animation-delay: 6s;
-    }
-    
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) rotate(0deg);
-      }
-      50% {
-        transform: translateY(-20px) rotate(10deg);
-      }
-    }
-    
-    /* Right Form Section */
-    .form-section {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f8f9fa;
-      position: relative;
-    }
-    
-    .form-container {
-      width: 70%;
-      max-width: 380px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 25px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      z-index: 2;
-      animation: slideIn 0.6s ease forwards;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    
-    @keyframes slideIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .form-header {
-      text-align: center;
-      margin-bottom: 15px;
-      padding: 12px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .form-header::before {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      opacity: 0.2;
-    }
-    
-    .form-header::after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      right: -15px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-      opacity: 0.15;
-    }
-    
-    .form-header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 5px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .form-header p {
-      color: #666;
-      font-size: 0.9rem;
-      position: relative;
-      z-index: 1;
-    }
-    
-    #registerForm {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-      padding: 8px;
-      border-radius: 16px;
-      border: 1px solid rgba(102, 126, 234, 0.1);
-    }
-    
-    .form-group {
-      margin-bottom: 10px;
-      position: relative;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 4px;
-      color: #444;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    
-    .input-wrapper {
-      position: relative;
-    }
-    
-    .input-wrapper .material-icons {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #667eea;
-      font-size: 18px;
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 10px 10px 10px 38px;
-      border-radius: 10px;
-      border: 1px solid #e0e0e0;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      background: #fff;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    input:focus, select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    /* Light color placeholders */
-    input::placeholder, select:invalid {
-      color: #bbb;
-      opacity: 0.7;
-    }
-    
-    .btn-container {
-      margin: 12px 0 5px;
-    }
-    
-    .btn {
-      width: 100%;
-      padding: 12px 0;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-    
-    .btn:active {
-      transform: translateY(0);
-    }
-    
-    .login-link {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #555;
-    }
-    
-    .login-link a {
-      color: #667eea;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      
-      .visual-section {
-        min-height: 40vh;
-      }
-      
-      .visual-content h1 {
-        font-size: 2.5rem;
-      }
-      
-      .form-container {
-        width: 90%;
-        padding: 20px 15px;
-      }
-    }
+    @keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .auth-logo { display:flex;align-items:center;gap:10px;margin-bottom:28px;font-family:'Sora',sans-serif;font-weight:700;font-size:1.2rem; }
+    .auth-logo-icon { width:40px;height:40px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center; }
+    .auth-logo-icon .material-icons { color:white;font-size:22px; }
+    .auth-title { font-size:1.5rem;font-weight:800;margin-bottom:6px; }
+    .auth-sub { font-size:.9rem;color:var(--text-muted);margin-bottom:28px; }
+    .auth-footer { text-align:center;margin-top:20px;font-size:.88rem;color:var(--text-muted); }
+    .auth-footer a { color:var(--primary-light);font-weight:600; }
+    .orb { position:fixed;border-radius:50%;filter:blur(80px);opacity:0.1;pointer-events:none;z-index:-1; }
+    .orb-1 { width:400px;height:400px;background:var(--primary);top:-150px;right:-150px; }
+    .orb-2 { width:400px;height:400px;background:var(--accent);bottom:-150px;left:-150px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Left Visual Section -->
-    <div class="visual-section">
-      <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-      </div>
-      <div class="visual-content">
-        <h1>Welcome EMS</h1>
-        <p>Manage your events effortlessly. Our platform is your creative partner for simple, successful events.</p>
-      </div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><span class="material-icons">event</span></div>
+      EventHub
     </div>
-    
-    <!-- Right Form Section -->
-    <div class="form-section">
-      <div class="form-container">
-        <div class="form-header">
-          <h1>Create Account</h1>
-          <p>Join the platform</p>
-        </div>
-        
-        <form id="registerForm">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <div class="input-wrapper">
-              <i class="material-icons">person</i>
-              <input type="text" id="name" required placeholder="John Doe"/>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="email">Email</label>
-            <div class="input-wrapper">
-              <i class="material-icons">email</i>
-              <input type="email" id="email" required placeholder="john@example.com"/>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="password">Password</label>
-            <div class="input-wrapper">
-              <i class="material-icons">lock</i>
-              <input type="password" id="password" required placeholder="••••••••"/>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="role">Role</label>
-            <div class="input-wrapper">
-              <i class="material-icons">work</i>
-              <select id="role" required>
-                <option value="" disabled selected>-- select --</option>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-          </div>
-          
-          <div class="btn-container">
-            <button class="btn" type="submit">Register</button>
-          </div>
-        </form>
-        
-        <div class="login-link">
-          Already have an account? <a href="login.html">Sign in</a>
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-sub">Join thousands of event-goers</p>
+
+    <form id="registerForm" autocomplete="on">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <div class="input-with-icon">
+          <span class="material-icons">person</span>
+          <input type="text" id="regName" class="form-control" placeholder="Jane Doe" required autocomplete="name"/>
         </div>
       </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div class="input-with-icon">
+          <span class="material-icons">mail</span>
+          <input type="email" id="regEmail" class="form-control" placeholder="you@example.com" required autocomplete="email"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Account Role</label>
+        <div class="input-with-icon">
+          <span class="material-icons">badge</span>
+          <select id="regRole" class="form-control" style="appearance: none; padding-right: 36px;">
+            <option value="user">User (Book Events)</option>
+            <option value="admin">Admin (Manage Events)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-with-icon">
+          <span class="material-icons">lock</span>
+          <input type="password" id="regPassword" class="form-control" placeholder="Min. 6 characters" required autocomplete="new-password"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-with-icon">
+          <span class="material-icons">lock_outline</span>
+          <input type="password" id="regConfirm" class="form-control" placeholder="Re-enter password" required autocomplete="new-password"/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;font-size:1rem;margin-top:8px">
+        <span class="material-icons">person_add</span> Create Account
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Login</a>
     </div>
   </div>
-  
+
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
 </body>

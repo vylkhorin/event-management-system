@@ -2,84 +2,52 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
-// Load env
-dotenv.config();
+dotenv.config({ path: require('path').join(__dirname, '.env') });
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Serve uploaded event images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
 app.use('/api/admin', require('./routes/admin'));
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+// Health check
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
+// Silence Chrome DevTools auto-discovery probe (not a real route)
+app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => res.status(204).end());
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Serve the frontend static files so opening http://localhost:5000 works
+const frontendPath = path.join(__dirname, '..', 'frontend');
+app.use(express.static(frontendPath));
 
+// Fallback: any non-API, non-file request → serve index.html
+// Note: Express 5 dropped bare '*' wildcard — use app.use() instead
+app.use((req, res) => {
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ message: 'API route not found' });
+    }
+    res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
-
-
-
-
-
-
-// // Import dependencies
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
-// require('dotenv').config();
-
-// // Initialize app
-// const app = express();
-// const PORT = process.env.PORT || 5000;
-
-// // Middleware
-// app.use(cors()); // Allow cross-origin requests
-// app.use(bodyParser.json()); // Parse JSON request bodies
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-
-// // Routes (placeholders)
-// app.get('/', (req, res) => {
-//     res.send('Event Management System API Running');
-// });
-
-
-// const authRoutes = require('./routes/auth');  // Auth Routes
-// app.use('/api/auth', authRoutes);
-
-// const adminRoutes = require('./routes/admin'); // Admin Routes
-// app.use('/api/admin', adminRoutes);
-
-
-// const userRoutes = require('./routes/user'); // User Routes
-// app.use('/api/user', userRoutes);
-
-
-
-// // MongoDB Connection
-// mongoose.connect(process.env.MONGO_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-// .then(() => console.log("MongoDB Connected"))
-// .catch((err) => console.error("MongoDB Connection Error:", err));
-
-
-
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`); // Start Server
-// });
+// Connect to MongoDB and start server
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log('MongoDB connected');
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
+    });

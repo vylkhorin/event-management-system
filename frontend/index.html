@@ -1,509 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <title>Event Management System</title>
+  <meta name="description" content="Discover, book, and manage events with ease. A modern event management platform."/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css"/>
   <style>
-    :root { 
-      --primary: #4a6de5; 
-      --secondary: #7c3aed; 
-      --accent: #ec4899;
-      --dark: #0f172a;
-      --light: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --card-border: rgba(255, 255, 255, 0.08);
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0e1a;
-      color: #e2e8f0;
-      overflow-x: hidden;
-      position: relative;
-    }
-    
-    /* Elegant background with subtle gradients */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 30%, rgba(74, 109, 229, 0.08) 0%, transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.08) 0%, transparent 25%),
-        linear-gradient(180deg, #0a0e1a, #151923 100%);
-      z-index: -2;
-    }
-    
-    /* Subtle floating shapes */
-    .shape {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.15;
-      z-index: -1;
-      animation: float 25s infinite ease-in-out;
-    }
-    
-    .shape-1 {
-      width: 400px;
-      height: 400px;
-      background: var(--primary);
-      top: -150px;
-      left: -150px;
-      animation-delay: 0s;
-    }
-    
-    .shape-2 {
-      width: 500px;
-      height: 500px;
-      background: var(--secondary);
-      bottom: -200px;
-      right: -200px;
-      animation-delay: 8s;
-    }
-    
-    .shape-3 {
-      width: 300px;
-      height: 300px;
-      background: var(--accent);
-      top: 60%;
-      left: 60%;
-      animation-delay: 15s;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      25% { transform: translate(15px, 15px) scale(1.02); }
-      50% { transform: translate(0, 20px) scale(0.98); }
-      75% { transform: translate(-15px, 10px) scale(1.01); }
-    }
-    
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 40px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      background: rgba(10, 14, 26, 0.7);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    
-    .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    .hero {
+      min-height: calc(100vh - 64px);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(74, 109, 229, 0.2);
-      position: relative;
-      overflow: hidden;
+      padding: 60px 24px;
     }
-    
-    .logo::before {
-      content: '';
-      position: absolute;
+    .hero-inner {
+      max-width: 860px;
       width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transform: translateX(-100%);
-      animation: shine 4s infinite;
+      text-align: center;
     }
-    
-    @keyframes shine {
-      100% { transform: translateX(100%); }
-    }
-    
-    .logo i {
-      color: white;
-      font-size: 28px;
-    }
-    
-    .brand h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
-      background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--primary-light);
+      margin-bottom: 28px;
     }
-    
-    nav {
-      display: flex;
-      gap: 8px;
-    }
-    
-    nav a {
-      color: #cbd5e1;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    nav a::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-      z-index: -1;
-    }
-    
-    nav a:hover::before {
-      transform: translateY(0);
-    }
-    
-    nav a:hover {
-      color: white;
-      transform: translateY(-2px);
-    }
-    
-    .hero {
-      max-width: 1200px;
-      margin: 100px auto;
-      padding: 80px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(74, 109, 229, 0.05) 0%, transparent 70%);
-      animation: rotate 40s linear infinite;
-      z-index: -1;
-    }
-    
-    @keyframes rotate {
-      100% { transform: rotate(360deg); }
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .hero h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      font-weight: 700;
-      margin-bottom: 30px;
+    .hero-badge .material-icons { font-size: 15px; }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
       line-height: 1.1;
-      background: linear-gradient(135deg, #ffffff, #a5b4fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      position: relative;
-      display: inline-block;
+      margin-bottom: 22px;
+      letter-spacing: -0.02em;
     }
-    
-    .hero h2::after {
-      content: '🎟️';
-      position: absolute;
-      top: 0;
-      right: -60px;
-      font-size: 3.5rem;
-      animation: bounce 3s infinite;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-    
     .hero p {
-      color: #94a3b8;
-      line-height: 1.8;
-      font-size: 1.3rem;
-      max-width: 900px;
-      margin-bottom: 50px;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
     }
-    
-    .cta {
+    .hero-cta {
       display: flex;
-      gap: 20px;
+      gap: 14px;
+      justify-content: center;
       flex-wrap: wrap;
       margin-bottom: 80px;
     }
-    
-    .btn {
-      appearance: none;
-      border: none;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: 18px 32px;
-      border-radius: 16px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1.05rem;
-      letter-spacing: 0.02em;
-      box-shadow: 0 10px 25px rgba(74, 109, 229, 0.25);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-100%);
-      transition: transform 0.3s ease;
-    }
-    
-    .btn:hover::before {
-      transform: translateY(0);
-    }
-    
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(74, 109, 229, 0.35);
-    }
-    
-    .btn.alt {
-      background: rgba(21, 25, 35, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: none;
-      backdrop-filter: blur(10px);
-    }
-    
-    .btn.alt:hover {
-      background: rgba(36, 42, 58, 0.6);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    .grid {
+    .hero-cta .btn { padding: 14px 28px; font-size: 1rem; }
+    /* Feature grid */
+    .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      position: relative;
-      z-index: 1;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      text-align: left;
+      margin-top: 20px;
     }
-    
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 32px;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      transition: var(--transition);
     }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(74, 109, 229, 0.05), rgba(124, 58, 237, 0.05));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
+    .feature-card:hover { border-color: rgba(108,99,255,0.2); transform: translateY(-3px); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(14,165,233,0.1));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
     }
-    
-    .card:hover::before {
-      opacity: 1;
-    }
-    
-    .card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(74, 109, 229, 0.2);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    }
-    
-    .card-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(74, 109, 229, 0.15), rgba(124, 58, 237, 0.15));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
-    
-    .card-icon i {
-      font-size: 30px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
+    .feature-icon .material-icons {
+      font-size: 22px;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+      -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    
-    .card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #f1f5f9;
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: -1;
     }
-    
-    .card p {
-      color: #94a3b8;
-      line-height: 1.7;
-    }
-    
-    footer {
-      color: #64748b;
-      text-align: center;
-      padding: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      margin-top: 100px;
-      font-size: 0.9rem;
-    }
-    
-    @media (max-width: 768px) {
-      header {
-        padding: 16px 20px;
-      }
-      
-      .hero {
-        padding: 40px 20px;
-        margin: 40px 20px;
-      }
-      
-      .hero h2 {
-        font-size: 2.5rem;
-      }
-      
-      .hero h2::after {
-        right: -30px;
-        font-size: 2rem;
-      }
-      
-      .cta {
-        flex-direction: column;
-        width: 100%;
-      }
-      
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
+    .orb-1 { width: 500px; height: 500px; background: var(--primary); top: -200px; left: -200px; }
+    .orb-2 { width: 600px; height: 600px; background: var(--secondary); bottom: -250px; right: -250px; }
   </style>
 </head>
 <body>
-  <!-- Elegant background shapes -->
-  <div class="shape shape-1"></div>
-  <div class="shape shape-2"></div>
-  <div class="shape shape-3"></div>
-  
-  <header>
-    <div class="brand">
-      <div class="logo">
-        <i class="material-icons">event</i>
-      </div>
-      <h1>Event Management System</h1>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <header class="ems-header">
+    <div class="ems-brand">
+      <div class="ems-brand-icon"><span class="material-icons">event</span></div>
+      EventHub
     </div>
-    <nav>
+    <nav class="ems-nav">
       <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
+      <a href="register.html" class="btn btn-primary btn-sm" style="margin-left:8px">
+        <span class="material-icons">person_add</span> Sign Up
+      </a>
     </nav>
   </header>
-  
+
   <section class="hero">
-    <div class="hero-content">
-      <h2>Plan. Discover. Book.</h2>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="material-icons">celebration</span>
+        The modern event management platform
+      </div>
+      <h1>
+        Plan. Discover.<br/>
+        <span class="gradient-text">Book Your Experience.</span>
+      </h1>
       <p>
-        A modern platform where users can browse events, book seats, manage bookings and profile.
-        Admins can create & edit events, monitor bookings, and generate reports — fast and securely.
+        Browse curated events with real-time availability, secure bookings, and seamless management — all in one place.
       </p>
-      <div class="cta">
-        <a class="btn" href="login.html">
-          <i class="material-icons">arrow_forward</i>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="login.html">
+          <span class="material-icons">arrow_forward</span>
           Get Started
         </a>
-        <a class="btn alt" href="register.html">
-          <i class="material-icons">person_add</i>
-          Create an Account
+        <a class="btn btn-secondary" href="register.html">
+          <span class="material-icons">person_add</span>
+          Create Account
         </a>
       </div>
-      <div class="grid">
-        <div class="card">
-          <div class="card-icon">
-            <i class="material-icons">explore</i>
-          </div>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-icons">explore</span></div>
           <h3>Explore Events</h3>
-          <p>Discover curated events with real-time seat availability.</p>
+          <p>Search, filter by category, price, or date. Real-time seat availability.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">
-            <i class="material-icons">security</i>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-icons">confirmation_number</span></div>
+          <h3>Instant Booking</h3>
+          <p>Book multiple seats, manage or cancel your reservations anytime.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-icons">security</span></div>
           <h3>Secure Auth</h3>
-          <p>JWT-based authentication and role-based access control.</p>
+          <p>JWT authentication with role-based access control for users and admins.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">
-            <i class="material-icons">build</i>
-          </div>
-          <h3>Admin Tools</h3>
-          <p>Create, update, delete events and manage bookings.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">
-            <i class="material-icons">insights</i>
-          </div>
-          <h3>Reports</h3>
-          <p>Monitor bookings and revenue at a glance.</p>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-icons">insights</span></div>
+          <h3>Admin Analytics</h3>
+          <p>Revenue charts, booking trends, user management, and CSV exports.</p>
         </div>
       </div>
     </div>
   </section>
-  
-  <footer>© 2025 Event Management System</footer>
+
+  <footer style="text-align:center;padding:28px;color:var(--text-muted);font-size:.85rem;border-top:1px solid var(--border)">
+    © 2025 EventHub — Built with ❤️
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>

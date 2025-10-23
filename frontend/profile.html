@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Profile • EMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body{margin:0;background:#0c1126;color:#e8ebff;font-family:Inter,system-ui,Segoe UI,Roboto}
+    header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:#0e1430;border-bottom:1px solid #1e2447}
+    .wrap{max-width:680px;margin:24px auto;padding:0 16px}
+    .card{background:#10173a;border:1px solid #1e2855;border-radius:14px;padding:16px}
+    label{display:block;margin-top:12px;font-size:.95rem}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid #2a3976;background:#0c1436;color:#e8ebff;margin-top:6px}
+    button{margin-top:14px;appearance:none;border:none;border-radius:10px;padding:12px 16px;background:#6c63ff;color:#fff;font-weight:700;cursor:pointer}
+    button.secondary{background:#202a59;border:1px solid #2a3976}
+    .row{display:flex;gap:10px;align-items:center}
+  </style>
+</head>
+<body>
+  <header>
+    <div>Profile</div>
+    <div class="row">
+      <a href="user.html">Dashboard</a>
+      <button class="secondary" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <h3>My Profile</h3>
+      <label>Full Name
+        <input id="profName" type="text" placeholder="Full name"/>
+      </label>
+      <label>Email
+        <input id="profEmail" type="email" placeholder="Email" disabled/>
+      </label>
+      <button onclick="updateProfile()">Save Changes</button>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/user.js"></script>
+</body>
+</html>
